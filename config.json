@@ -1,9 +1,9 @@
 {
   "cache_time": 7200,
   "api_site": {
-    "feifan": {
-      "api": "http://ffzy5.tv/api.php/provide/vod",
-      "name": "非凡资源",
+    "ikun": {
+      "api": "https://ikunzyapi.com/api.php/provide/vod/",
+      "name": "ikun|点播",
       "detail": " "
     }
 
@@ -25,4 +25,4 @@
       "detail": " "
     }
 
-  },
+  }
