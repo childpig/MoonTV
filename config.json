@@ -1,8 +1,5 @@
 {
   "cache_time": 7200,
   "api_site": {
-    "ikun": {
-      "api": "https://ikunzyapi.com/api.php/provide/vod/",
-      "name": "ikun|点播",
-    }
   }
+}
