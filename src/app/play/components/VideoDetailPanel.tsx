@@ -5,6 +5,7 @@
 import { Download, Heart } from 'lucide-react';
 
 import { SearchResult } from '@/lib/types';
+import { processImageUrl } from '@/lib/utils';
 
 import { FollowingIconButton } from '@/components/FollowingIcon';
 
@@ -47,20 +48,37 @@ export function VideoDetailPanel(props: VideoDetailPanelProps) {
   } = props;
 
   return (
-    <div className='grid grid-cols-1 gap-4'>
+    <div className='grid grid-cols-1 gap-5 md:grid-cols-[auto_1fr] md:gap-6'>
+      {/* 封面图片区 */}
+      {detail?.poster && (
+        <div className='mx-auto flex-shrink-0 md:mx-0'>
+          <div className='aspect-[2/3] w-28 overflow-hidden rounded-xl bg-gray-200 shadow-md sm:w-36 md:w-44 lg:w-52 dark:bg-gray-700'>
+            <img
+              src={processImageUrl(detail.poster)}
+              alt={videoTitle || '影片封面'}
+              className='w-full h-full object-cover'
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </div>
+        </div>
+      )}
       {/* 文字区 */}
-      <div className='w-full'>
-        <div className='p-6 flex flex-col min-h-0'>
-          {/* 标题 */}
-          <h1 className='text-3xl font-bold mb-2 tracking-wide flex items-center flex-shrink-0 text-center md:text-left w-full'>
-            {videoTitle || '影片标题'}
+      <div className='flex w-full min-w-0 flex-col gap-3'>
+        {/* 标题 + 操作按钮 */}
+        <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
+          <h1 className='flex min-w-0 flex-wrap items-center justify-center gap-x-2 text-xl font-bold tracking-wide sm:text-2xl md:justify-start'>
+            <span className='min-w-0 truncate'>{videoTitle || '影片标题'}</span>
             {totalEpisodes > 1 && (
-              <span className='text-gray-500 dark:text-gray-400 text-2xl ml-3'>
+              <span className='text-base font-normal text-gray-500 sm:text-lg dark:text-gray-400'>
                 {detail?.episodes_titles?.[currentEpisodeIndex] ||
                   `第 ${currentEpisodeIndex + 1} 集`}
               </span>
             )}
-            <div className='ml-3 flex flex-shrink-0 items-center gap-3'>
+          </h1>
+          <div className='flex flex-shrink-0 items-center justify-center gap-3 md:justify-end'>
               <button
                 type='button'
                 onClick={(e) => {
@@ -131,36 +149,42 @@ export function VideoDetailPanel(props: VideoDetailPanelProps) {
                   }}
                 />
               )}
-            </div>
-          </h1>
-
-          {/* 关键信息行 */}
-          <div className='flex flex-wrap items-center gap-3 text-base mb-4 opacity-80 flex-shrink-0'>
-            {detail?.class && (
-              <span className='text-green-600 font-semibold'>
-                {detail.class}
-              </span>
-            )}
-            {(detail?.year || videoYear) && (
-              <span>{detail?.year || videoYear}</span>
-            )}
-            {detail?.source_name && (
-              <span className='border border-gray-500/60 px-2 py-[1px] rounded'>
-                {detail.source_name}
-              </span>
-            )}
-            {detail?.type_name && <span>{detail.type_name}</span>}
           </div>
-          {/* 剧情简介 */}
-          {detail?.desc && (
-            <div
-              className='mt-0 text-base leading-relaxed opacity-90 overflow-y-auto pr-2 flex-1 min-h-0 scrollbar-hide'
-              style={{ whiteSpace: 'pre-line' }}
-            >
-              {detail.desc}
-            </div>
+        </div>
+
+        {/* 关键信息行 */}
+        <div className='flex flex-wrap items-center justify-center gap-2 text-sm md:justify-start'>
+          {detail?.class && (
+            <span className='rounded-md bg-green-500/10 px-2 py-0.5 font-medium text-green-600 dark:text-green-400'>
+              {detail.class}
+            </span>
+          )}
+          {(detail?.year || videoYear) && (
+            <span className='rounded-md bg-black/5 px-2 py-0.5 text-gray-600 dark:bg-white/10 dark:text-gray-300'>
+              {detail?.year || videoYear}
+            </span>
+          )}
+          {detail?.source_name && (
+            <span className='rounded-md bg-black/5 px-2 py-0.5 text-gray-600 dark:bg-white/10 dark:text-gray-300'>
+              {detail.source_name}
+            </span>
+          )}
+          {detail?.type_name && (
+            <span className='rounded-md bg-black/5 px-2 py-0.5 text-gray-600 dark:bg-white/10 dark:text-gray-300'>
+              {detail.type_name}
+            </span>
           )}
         </div>
+
+        {/* 剧情简介 */}
+        {detail?.desc && (
+          <div
+            className='scrollbar-hide max-h-48 overflow-y-auto pr-1 text-sm leading-relaxed text-gray-600 md:max-h-none dark:text-gray-300'
+            style={{ whiteSpace: 'pre-line' }}
+          >
+            {detail.desc}
+          </div>
+        )}
       </div>
     </div>
   );
